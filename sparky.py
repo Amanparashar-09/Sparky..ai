@@ -47,30 +47,28 @@ def chat(query):
         return f"Sorry, I encountered an error: {str(e)}"
 
 def say(text):
-    """Convert text to speech and play it using threading."""
+    """Convert text to speech and play it using Streamlit's audio player."""
     timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     mp3_filename = os.path.join(audio_folder, f"response_{timestamp}.mp3")
 
     try:
+        # Convert text to speech and save the audio file
         tts = gTTS(text=text, lang="en")
         tts.save(mp3_filename)
 
-        def play_audio():
-            pygame.mixer.music.load(mp3_filename)
-            pygame.mixer.music.play()
-            while pygame.mixer.music.get_busy():
-                if st.session_state.stop_audio:
-                    pygame.mixer.music.stop()
-                    break
-            # Clean up the audio file after playback
-            if os.path.exists(mp3_filename):
-                os.remove(mp3_filename)
+        # Open the audio file and read its content
+        with open(mp3_filename, "rb") as audio_file:
+            audio_bytes = audio_file.read()
 
-        # Use threading to avoid blocking the main thread
-        audio_thread = threading.Thread(target=play_audio)
-        audio_thread.start()
+        # Streamlit's built-in audio player
+        st.audio(audio_bytes, format="audio/mp3")
+
+        # Remove the file after playing
+        os.remove(mp3_filename)
+
     except Exception as e:
         st.error(f"Error in text-to-speech: {str(e)}")
+
 
 def stop_audio():
     """Stop audio playback."""
