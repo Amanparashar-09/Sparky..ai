@@ -2,4 +2,3 @@ streamlit
 SpeechRecognition
 cohere
 gtts
-pygame
