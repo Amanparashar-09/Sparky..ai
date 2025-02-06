@@ -5,7 +5,6 @@ import os
 import webbrowser
 import datetime
 from gtts import gTTS
-import pygame
 import threading
 import time
 
