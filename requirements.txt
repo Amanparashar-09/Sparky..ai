@@ -1,1 +1,4 @@
 SpeechRecognition
+cohere
+gtts
+pygame
